@@ -45,9 +45,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_09_072858) do
     t.index ["user_id"], name: "index_user_books_on_user_id"
   end
 
-  create_table "user_contents", charset: "utf8", force: :cascade do |t|
+  create_table "user_contents", charset: "utf8", comment: "紐づくbookがなければ", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "content_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["content_id"], name: "index_user_contents_on_content_id"
+    t.index ["user_id"], name: "index_user_contents_on_user_id"
   end
 
   create_table "user_genres", charset: "utf8", force: :cascade do |t|
@@ -72,6 +76,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_09_072858) do
   add_foreign_key "contents", "books", on_delete: :nullify
   add_foreign_key "user_books", "books", on_delete: :cascade
   add_foreign_key "user_books", "users", on_delete: :cascade
+  add_foreign_key "user_contents", "contents", on_delete: :cascade
+  add_foreign_key "user_contents", "users", on_delete: :cascade
   add_foreign_key "user_genres", "genres", on_delete: :cascade
   add_foreign_key "user_genres", "users", on_delete: :cascade
 end
